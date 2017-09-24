@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NgMetadataExample.Models;
 
 namespace NgMetadataExample
 {
@@ -18,6 +19,7 @@ namespace NgMetadataExample
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+	        services.AddNgMetadata().AddTypes(typeof(ExampleModel));
 			services.AddMvc();
         }
 
@@ -38,16 +40,17 @@ namespace NgMetadataExample
             }
 
             app.UseStaticFiles();
+	        app.UseNgMetadata("/metadata");
 
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    "default",
+                    "{controller=Home}/{action=Index}/{id?}");
 
                 routes.MapSpaFallbackRoute(
-                    name: "spa-fallback",
-                    defaults: new { controller = "Home", action = "Index" });
+                    "spa-fallback",
+                    new { controller = "Home", action = "Index" });
             });
         }
     }
