@@ -15,9 +15,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "items", "items", "{AC003510
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NgMetadataExample", "samples\NgMetadataExample\NgMetadataExample.csproj", "{33D1BFDA-C821-4B54-A260-F8281C3187D2}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{33D1BFDA-C821-4B54-A260-F8281C3187D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33D1BFDA-C821-4B54-A260-F8281C3187D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33D1BFDA-C821-4B54-A260-F8281C3187D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33D1BFDA-C821-4B54-A260-F8281C3187D2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{33D1BFDA-C821-4B54-A260-F8281C3187D2} = {5BAB9452-A201-461D-B99F-6B5746511A7C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8A03B2F8-4E29-42EC-8621-926E4B9D0425}
