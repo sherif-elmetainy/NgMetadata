@@ -1,7 +1,9 @@
-﻿namespace CodeArt.SpaMetadata
+﻿using System.Threading.Tasks;
+
+namespace CodeArt.SpaMetadata
 {
     public interface ISpaMetadataService
     {
-	    ModelInformation GetModelMetadataInformation(string key);
+	    Task<ModelInformation> GetModelMetadataInformation(string key);
     }
 }

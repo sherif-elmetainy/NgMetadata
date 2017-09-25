@@ -36,7 +36,7 @@ namespace CodeArt.SpaMetadata
 	    public async Task Invoke(HttpContext context)
 	    {
 		    var path = context.Request.Path;
-		    var data = _ngMetadataService.GetModelMetadataInformation(path);
+		    var data = await _ngMetadataService.GetModelMetadataInformation(path);
 		    if (data == null)
 		    {
 			    context.Response.StatusCode = 404;

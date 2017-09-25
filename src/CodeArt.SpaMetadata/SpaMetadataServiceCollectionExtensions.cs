@@ -1,5 +1,6 @@
 ﻿using System;
 using CodeArt.SpaMetadata;
+using CodeArt.SpaMetadata.Processors;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection
@@ -20,7 +21,11 @@ namespace Microsoft.Extensions.DependencyInjection
 	    {
 		    var builder = new SpaMetadataBuilder(services);
 		    services.AddSingleton<ISpaMetadataService, SpaMetadataService>();
-		    return builder;
+		    services.AddSingleton<ITypeMetadataProcessor, DefaultNamesProcessor>();
+		    services.AddSingleton<IPropertyMetadataProcessor, DefaultNamesProcessor>();
+		    services.AddSingleton<IPropertyMetadataProcessor, ValidatorsPropertyProcessor>();
+
+			return builder;
 	    }
 	}
 }

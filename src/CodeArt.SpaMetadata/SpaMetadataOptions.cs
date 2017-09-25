@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CodeArt.SpaMetadata.Processors;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.ResponseCaching;
@@ -54,15 +55,5 @@ namespace CodeArt.SpaMetadata
 		/// Serializer settings for model itself. This will determine the value of the name property (camel-case, pascal case, etc).
 		/// </summary>
 		public JsonSerializerSettings ModelSerializerSettings { get; set; }
-
-		/// <summary>
-		/// Processors that perform additional processing on all model types.
-		/// </summary>
-		public ICollection<ITypeMetadataProcessor> TypeProcessors { get; } = new List<ITypeMetadataProcessor>();
-
-		/// <summary>
-		/// Processors that perform additinal processing on all properties for all model types.
-		/// </summary>
-		public ICollection<IPropertyMetadataProcessor> PropertyProcessors { get; } = new List<IPropertyMetadataProcessor>();
     }
 }

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Internal;
+using System.Globalization;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
@@ -11,12 +10,12 @@ namespace CodeArt.SpaMetadata
 {
 	internal class SpaMetadataService : ISpaMetadataService
     {
+	    private readonly IEnumerable<ITypeMetadataProcessor> _typeMetadataProcessors;
+	    private readonly IEnumerable<IPropertyMetadataProcessor> _propertyMetadataProcessors;
 	    private readonly SpaMetadataOptions _options;
 	    private readonly IMemoryCache _memoryCache;
 	    private readonly IModelMetadataProvider _modelMetadataProvider;
-	    private readonly ClientValidatorCache _clientValidatorCache;
-	    private readonly CompositeClientModelValidatorProvider _validatorProvider;
-
+	    
 	    private static readonly Dictionary<Type, string> BuiltInTypes = new Dictionary<Type, string>
 	    {
 		    {typeof(string), "string"},
@@ -40,34 +39,78 @@ namespace CodeArt.SpaMetadata
 	    };
 
 		public SpaMetadataService(IModelMetadataProvider modelMetadataProvider,
-		    IOptions<MvcViewOptions> mvcViewOptions,
-		    ClientValidatorCache clientValidatorCache,
 		    IMemoryCache memoryCache,
-		    IOptions<SpaMetadataOptions> options)
+		    IOptions<SpaMetadataOptions> options,
+			IEnumerable<ITypeMetadataProcessor> typeMetadataProcessors,
+			IEnumerable<IPropertyMetadataProcessor> propertyMetadataProcessors
+			)
 	    {
-			_modelMetadataProvider = modelMetadataProvider ?? throw new ArgumentNullException(nameof(modelMetadataProvider));
+		    _typeMetadataProcessors = typeMetadataProcessors;
+		    _propertyMetadataProcessors = propertyMetadataProcessors;
+		    _modelMetadataProvider = modelMetadataProvider ?? throw new ArgumentNullException(nameof(modelMetadataProvider));
 
-		    var clientValidatorProviders = mvcViewOptions?.Value?.ClientModelValidatorProviders ?? throw new ArgumentNullException(nameof(mvcViewOptions));
-		    _validatorProvider = new CompositeClientModelValidatorProvider(clientValidatorProviders);
-		    _clientValidatorCache = clientValidatorCache ?? throw new ArgumentNullException(nameof(clientValidatorCache));
 		    _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
 		    _options = options.Value ?? throw new ArgumentNullException(nameof(options));
 		}
 
-	    public ModelInformation GetModelMetadataInformation(string key)
+	    private sealed class MetadataCacheKey : IEquatable<MetadataCacheKey>
 	    {
-		    if (!_options.AllowedTypes.TryGetValue(key, out var type))
-			    return null;
-		    return GetModelMetadataInformation(type);
+		    private readonly string _key;
+		    private readonly string _culture;
+
+		    public MetadataCacheKey(string key)
+		    {
+			    _key = key;
+			    _culture = CultureInfo.CurrentUICulture.Name;
+		    }
+
+		    public bool Equals(MetadataCacheKey other)
+		    {
+			    if (ReferenceEquals(null, other)) return false;
+			    if (ReferenceEquals(this, other)) return true;
+			    return string.Equals(_key, other._key) && string.Equals(_culture, other._culture);
+		    }
+
+		    public override bool Equals(object obj)
+		    {
+			    if (ReferenceEquals(null, obj)) return false;
+			    if (ReferenceEquals(this, obj)) return true;
+			    if (obj.GetType() != GetType()) return false;
+			    return Equals((MetadataCacheKey) obj);
+		    }
+
+		    public override int GetHashCode()
+		    {
+			    unchecked
+			    {
+				    return ((_key != null ? _key.GetHashCode() : 0) * 397) ^ (_culture != null ? _culture.GetHashCode() : 0);
+			    }
+		    }
 	    }
 
-	    private ModelInformation GetModelMetadataInformation(Type type)
+	    public Task<ModelInformation> GetModelMetadataInformation(string key)
+	    {
+			var cacheKey = new MetadataCacheKey(key);
+		    return _memoryCache.GetOrCreateAsync(cacheKey, entry =>
+		    {
+			    if (!_options.AllowedTypes.TryGetValue(key, out var type))
+				    return null;
+			    var cacheOptions = _options.MemoryCacheEntryOptions;
+			    if (cacheOptions != null)
+			    {
+				    entry.SetOptions(cacheOptions);
+			    }
+			    return GetModelMetadataInformation(type);
+		    });
+	    }
+
+	    private Task<ModelInformation> GetModelMetadataInformation(Type type)
 	    {
 			var typeMetadata = _modelMetadataProvider.GetMetadataForType(type);
 		    return GetModelMetadataInformation(typeMetadata);
 	    }
 
-	    private ModelInformation GetModelMetadataInformation(ModelMetadata typeMetadata)
+	    private async Task<ModelInformation> GetModelMetadataInformation(ModelMetadata typeMetadata)
 	    {
 		    var info = new TypeModelInformation
 		    {
@@ -80,14 +123,25 @@ namespace CodeArt.SpaMetadata
 
 		    foreach (var typeMetadataProperty in typeMetadata.Properties)
 			{
-				var propertyInfo = GetPropertyModelInformation(typeMetadataProperty);
-				info.Properties.Add(propertyInfo.Key, propertyInfo as PropertyModelInformation);
+				var propertyInfo = await GetPropertyModelInformation(typeMetadataProperty);
+				info.Properties.Add(propertyInfo.Key, propertyInfo);
 			}
+
+		    if (_typeMetadataProcessors != null)
+		    {
+			    foreach (var typeMetadataProcessor in _typeMetadataProcessors)
+			    {
+				    if (typeMetadataProcessor.CanProcess(typeMetadata))
+				    {
+					    await typeMetadataProcessor.ProcessType(typeMetadata, info);
+				    }
+			    }
+		    }
 		    
 			return info;
 	    }
 
-	    private PropertyModelInformation GetPropertyModelInformation(ModelMetadata typeMetadataProperty)
+	    private async Task<PropertyModelInformation> GetPropertyModelInformation(ModelMetadata typeMetadataProperty)
 	    {
 		    var propertyInfo = new PropertyModelInformation
 		    {
@@ -98,25 +152,17 @@ namespace CodeArt.SpaMetadata
 			    Key = typeMetadataProperty.PropertyName,
 			    Order = typeMetadataProperty.Order
 		    };
-		    var validators = _clientValidatorCache.GetValidators(
-			    typeMetadataProperty,
-			    _validatorProvider);
 
-		    if (validators.Count > 0)
+		    if (_propertyMetadataProcessors != null)
 		    {
-			    var actionContext = new ActionContext();
-			    var dictionary = new Dictionary<string, string>();
-			    var clientModelValidationContext = new ClientModelValidationContext(actionContext, typeMetadataProperty, _modelMetadataProvider, dictionary);
-			    foreach (var clientModelValidator in validators)
+			    foreach (var propertyMetadataProcessor in _propertyMetadataProcessors)
 			    {
-				    clientModelValidator.AddValidation(clientModelValidationContext);
-			    }
-			    foreach (var keyValuePair in dictionary)
-			    {
-				    propertyInfo.ValidationData.Add(keyValuePair.Key.Replace("data-val-", ""), keyValuePair.Value);
+				    if (propertyMetadataProcessor.CanProcess(typeMetadataProperty))
+				    {
+					    await propertyMetadataProcessor.ProcessProperty(typeMetadataProperty, propertyInfo);
+				    }
 			    }
 		    }
-			
 			return propertyInfo;
 	    }
 
