@@ -117,14 +117,14 @@ namespace CodeArt.SpaMetadata
 			    Name = typeMetadata.PropertyName,
 			    DisplayName = typeMetadata.DisplayName,
 			    Description = typeMetadata.Description,
-			    PlaceHolderText = typeMetadata.Placeholder,
-			    Key = typeMetadata.ModelType.Name
-		    };
+			    Key = typeMetadata.ModelType.Name,
+			    Order = typeMetadata.Order
+			};
 
 		    foreach (var typeMetadataProperty in typeMetadata.Properties)
 			{
 				var propertyInfo = await GetPropertyModelInformation(typeMetadataProperty);
-				info.Properties.Add(propertyInfo.Key, propertyInfo);
+				info.Properties.Add(propertyInfo);
 			}
 
 		    if (_typeMetadataProcessors != null)

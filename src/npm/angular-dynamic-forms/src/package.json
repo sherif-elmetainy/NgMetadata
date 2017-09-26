@@ -1,0 +1,33 @@
+{
+  "name": "@code-art/angular-dynamic-forms",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sherif-elmetainy/SpaMetadata"
+  },
+  "author": {
+    "name": "Sherif Elmetainy",
+    "email": "sherif.elmetainy@code-art.net"
+  },
+  "keywords": [
+    "angular"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sherif-elmetainy/SpaMetadata/issues"
+  },
+  "main": "angular-dynamic-forms.umd.js",
+  "module": "angular-dynamic-forms.js",
+  "jsnext:main": "angular-dynamic-forms.js",
+  "typings": "angular-dynamic-forms.d.ts",
+  "peerDependencies": {
+    "@angular/common": "^4.3.1",
+    "@angular/core": "^4.3.1",
+    "@angular/http": "^4.3.1",
+    "@angular/forms": "^4.3.1",
+    "@angular/platform-browser": "^4.3.1",
+    "@angular/platform-browser-dynamic": "^4.3.1",
+    "rxjs": "^5.0.1",
+    "zone.js": "^0.8.4"
+  }
+}

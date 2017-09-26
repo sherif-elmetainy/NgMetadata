@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "rootDir": "./src",
+    "lib": [
+      "es2015",
+      "dom"
+    ],
+    "target": "es5",
+    "skipLibCheck": true,
+    "types": [],
+    "paths": {
+      "@code-art/angular-dynamic-forms": [ "index.ts" ]
+    }
+  },
+  "exclude": ["dist", "node_modules", "obj", "bin", "build", ".playground"]
+}

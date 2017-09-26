@@ -5,12 +5,13 @@ const AotPlugin = require('@ngtools/webpack').AotPlugin;
 const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
 
 module.exports = (env) => {
+// ReSharper disable UseOfImplicitGlobalInFunctionScope
     // Configuration in common to both client-side and server-side bundles
     const isDevBuild = !(env && env.prod);
     const sharedConfig = {
         stats: { modules: false },
         context: __dirname,
-        resolve: { extensions: [ '.js', '.ts' ] },
+        resolve: { extensions: ['.js', '.ts'], modules: [path.join(__dirname, 'node_modules'), 'node_modules']},
         output: {
             filename: '[name].js',
             publicPath: 'dist/' // Webpack dev middleware, if enabled, handles requests for this URL prefix
@@ -81,4 +82,5 @@ module.exports = (env) => {
     });
 
     return [clientBundleConfig, serverBundleConfig];
+    // ReSharper restore UseOfImplicitGlobalInFunctionScope
 };

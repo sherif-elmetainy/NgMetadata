@@ -12,7 +12,7 @@ const treeShakableModules = [
     '@angular/platform-browser',
     '@angular/platform-browser-dynamic',
     '@angular/router',
-    'zone.js',
+    'zone.js'
 ];
 const nonTreeShakableModules = [
     'bootstrap',
@@ -20,12 +20,13 @@ const nonTreeShakableModules = [
     'es6-promise',
     'es6-shim',
     'event-source-polyfill',
-    'jquery',
+    'jquery'
 ];
 const allModules = treeShakableModules.concat(nonTreeShakableModules);
 
 module.exports = (env) => {
-    const extractCSS = new ExtractTextPlugin('vendor.css');
+// ReSharper disable UseOfImplicitGlobalInFunctionScope
+    const extractCss = new ExtractTextPlugin('vendor.css');
     const isDevBuild = !(env && env.prod);
     const sharedConfig = {
         stats: { modules: false },
@@ -57,11 +58,11 @@ module.exports = (env) => {
         output: { path: path.join(__dirname, 'wwwroot', 'dist') },
         module: {
             rules: [
-                { test: /\.css(\?|$)/, use: extractCSS.extract({ use: isDevBuild ? 'css-loader' : 'css-loader?minimize' }) }
+                { test: /\.css(\?|$)/, use: extractCss.extract({ use: isDevBuild ? 'css-loader' : 'css-loader?minimize' }) }
             ]
         },
         plugins: [
-            extractCSS,
+            extractCss,
             new webpack.DllPlugin({
                 path: path.join(__dirname, 'wwwroot', 'dist', '[name]-manifest.json'),
                 name: '[name]_[hash]'
@@ -77,7 +78,7 @@ module.exports = (env) => {
         entry: { vendor: allModules.concat(['aspnet-prerendering']) },
         output: {
             path: path.join(__dirname, 'ClientApp', 'dist'),
-            libraryTarget: 'commonjs2',
+            libraryTarget: 'commonjs2'
         },
         module: {
             rules: [ { test: /\.css(\?|$)/, use: ['to-string-loader', isDevBuild ? 'css-loader' : 'css-loader?minimize' ] } ]
@@ -91,4 +92,5 @@ module.exports = (env) => {
     });
 
     return [clientBundleConfig, serverBundleConfig];
+    // ReSharper restore UseOfImplicitGlobalInFunctionScope
 }

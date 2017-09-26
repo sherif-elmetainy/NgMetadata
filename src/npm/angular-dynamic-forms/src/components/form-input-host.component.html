@@ -1,0 +1,7 @@
+﻿<div [class.has-error]="(formComponentModel.component | async).hasError">
+    <label [attr.for]="formComponentModel.metadata.name" class="control-label">{{formComponentModel.metadata.displayName}}</label>
+    <div>
+        <ng-template formHost></ng-template>
+    </div>
+    <validation-errors [control]="formComponentModel.control | async"></validation-errors>
+</div>

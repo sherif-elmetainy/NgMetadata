@@ -1,0 +1,3 @@
+﻿<span [attr.class]="containerCssClassName" *ngIf="hasError">
+    <span *ngFor="let errorMessage of errorMessages" [attr.class]="errorCssClassName">{{errorMessage}}</span>
+</span>

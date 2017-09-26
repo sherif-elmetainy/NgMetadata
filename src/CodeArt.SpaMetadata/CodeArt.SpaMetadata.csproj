@@ -2,9 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <AssemblyName>CodeArt.SpaMetadata</AssemblyName>
-    <RootNamespace>CodeArt.SpaMetadata</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="npm\codeart-spa-metadata\**" />
+    <Compile Remove="npm\ng-spa-metadata\dist\**" />
+    <Compile Remove="npm\ng-spa-metadata\node_modules\**" />
+    <EmbeddedResource Remove="npm\codeart-spa-metadata\**" />
+    <EmbeddedResource Remove="npm\ng-spa-metadata\dist\**" />
+    <EmbeddedResource Remove="npm\ng-spa-metadata\node_modules\**" />
+    <None Remove="npm\ng-spa-metadata\dist\**" />
+    <None Remove="npm\ng-spa-metadata\node_modules\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.0.0" />

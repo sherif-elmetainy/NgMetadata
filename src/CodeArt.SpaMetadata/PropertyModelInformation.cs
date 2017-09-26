@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace CodeArt.SpaMetadata
 {
@@ -8,46 +10,43 @@ namespace CodeArt.SpaMetadata
 		/// <summary>
 		/// Property type
 		/// </summary>
+		[JsonProperty("type")]
 	    public ModelInformation Type { get; set; }
 
 		/// <summary>
-		/// Display order. Typicaly set using <see cref="DisplayAttribute.Order"/>.
-		/// </summary>
-		public int Order { get; set; }
+	    /// Placeholder (propmt). Typically set using the <see cref="DisplayAttribute.Prompt"/>
+	    /// </summary>
+	    [JsonProperty("placeHolderText")]
+	    public string PlaceHolderText { get; set; }
 
 		/// <summary>
 		/// Validation data.
 		/// </summary>
-	    public Dictionary<string, string> ValidationData { get; } = new Dictionary<string, string>();
-
-		/// <summary>
-		/// Additional data.
-		/// </summary>
-	    public Dictionary<string, string> AdditionalData { get; } = new Dictionary<string, string>();
+		[JsonProperty("validationData")]
+		public Dictionary<string, string> ValidationData { get; } = new Dictionary<string, string>();
 
 		/// <summary>
 		/// Whether the property is a collection	
 		/// </summary>
+		[JsonProperty("isCollection")]
 	    public bool IsCollection { get; set; }
 
 		/// <summary>
 		/// Whether the property is an enum
 		/// </summary>
+		[JsonProperty("isEnum")]
 	    public bool IsEnum { get; set; }
 
-	    /// <summary>
-	    /// Whether the property is a flags enum
-	    /// </summary>
-	    public bool IsFlagsEnum { get; set; }
-
 		/// <summary>
-		/// Whether the property is a simple type (string, int, date, etc etc)
+		/// Whether the property is a flags enum
 		/// </summary>
-		public bool IsSimpleType { get; set; }
+		[JsonProperty("isFlagsEnum")]
+		public bool IsFlagsEnum { get; set; }
 
 		/// <summary>
 		/// The type name of the property.
 		/// </summary>
-	    public string TypeName { get; set; }
+		[JsonProperty("typeName")]
+		public string TypeName { get; set; }
     }
 }
