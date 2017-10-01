@@ -1,28 +1,29 @@
-﻿import { AbstractFormComponent } from './abstract-form.component';
-import { PropertyMetadataModel } from '../models/metadata-models';
-import { TypeConverterService } from '../services/type-converter.service';
+﻿import { Injector } from '@angular/core';
 import { ValidatorFn, AbstractControl } from '@angular/forms';
 
-/**
- * Abstract class for input controls metadata
- */
-export abstract class AbstractInputComponent extends AbstractFormComponent {
-    private propertyMetadata: PropertyMetadataModel;
-    /**
-     * Consuctor.
-     * @param propertyMetadata
-     * @param typeConverterService
-     */
-    // ReSharper disable once AbstractClassConstructorCanBeMadeProtected
-    public constructor(protected readonly typeConverterService: TypeConverterService) {
-        super();
+import { AbstractFormModel } from './abstract-form-model';
+import { PropertyMetadataModel } from './metadata-models';
+import {TypeConverterService} from '../services/type-converter.service';
+
+export abstract class AbstractInputModel extends AbstractFormModel {
+    private typeConverterServiceInternal: TypeConverterService | null;
+
+    protected constructor(public readonly propertyMetadata: PropertyMetadataModel, injector: Injector) {
+        super(propertyMetadata, injector);
+        this.typeConverterServiceInternal = null;
+    }
+
+    protected get typeConverterService(): TypeConverterService {
+        if (this.typeConverterServiceInternal === null) {
+            this.typeConverterServiceInternal = this.injector.get(TypeConverterService);
+        }
+        return this.typeConverterServiceInternal;
     }
 
     /**
      * Create the validators for this control
      */
-    protected createValidators(propertyMetadata: PropertyMetadataModel): ValidatorFn[] {
-        this.propertyMetadata = propertyMetadata;
+    protected createValidators(): ValidatorFn[] {
         const vals: ValidatorFn[] = [];
         if (!this.metadata) {
             return vals;
@@ -55,9 +56,9 @@ export abstract class AbstractInputComponent extends AbstractFormComponent {
     }
 
     /**
-     * Url validation function
-     * @param val
-     */
+    * Url validation function
+    * @param val
+    */
     private urlVal(val: any): boolean {
         if (typeof val === 'string') {
             // tslint:disable-next-line 
@@ -69,13 +70,13 @@ export abstract class AbstractInputComponent extends AbstractFormComponent {
     }
 
     /**
-     * Email validation function
-     * @param val
-     */
+    * Email validation function
+    * @param val
+    */
     private emailVal(val: any): boolean {
-        const rx =
-            /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
         if (typeof val === 'string') {
+            const rx =
+                /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
             return rx.test(val);
         }
         return false;
@@ -94,9 +95,9 @@ export abstract class AbstractInputComponent extends AbstractFormComponent {
     }
 
     /**
-     * Range validation function
-     * @param val
-     */
+    * Range validation function
+    * @param val
+    */
     private rangeVal(val: any): boolean {
         const num = this.typeConverterService.convertToNumber(val) as number;
         if (isNaN(num)) {
@@ -175,7 +176,7 @@ export abstract class AbstractInputComponent extends AbstractFormComponent {
      * @param key
      * @param validationFunction
      */
-    private pushValidatorFn(vals: ValidatorFn[], key: string, validationFunction: ((v: any) => boolean)|null) {
+    private pushValidatorFn(vals: ValidatorFn[], key: string, validationFunction: ((v: any) => boolean) | null) {
         const fn = this.createValdiatorFn(key, validationFunction);
         if (fn !== null) {
             vals.push(fn);
@@ -188,7 +189,7 @@ export abstract class AbstractInputComponent extends AbstractFormComponent {
      * @param key
      * @param validationFunction
      */
-    private createValdiatorFn(key: string, validationFunction: ((v: any) => boolean) | null): ValidatorFn|null {
+    private createValdiatorFn(key: string, validationFunction: ((v: any) => boolean) | null): ValidatorFn | null {
         const message = this.propertyMetadata.validationData[key];
         if (message == null) {
             return null;
@@ -210,4 +211,5 @@ export abstract class AbstractInputComponent extends AbstractFormComponent {
             return null;
         };
     }
+
 }

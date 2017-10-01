@@ -1,16 +1,12 @@
-﻿import { Component } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+﻿import { Component, OnInit, Input, Injector } from '@angular/core';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/first';
 
-import { TypeMetadataModel } from '../models/metadata-models';
-import { AbstractControl, FormGroup } from '@angular/forms';
+
 import { AbstractFormComponent } from './abstract-form.component';
 import { MetadataService } from '../services/metadata.service';
-import { FormComponentModel } from '../models/form-component.model';
-import { FormComponentFactoryService } from '../services/form-component-factory.service';
-import { BaseMetadataModel } from '../models/metadata-models';
+import { AbstractFormModel } from '../models/abstract-form-model';
+import { FormGroupModel } from '../models/form-group-model';
 
 
 /**
@@ -20,36 +16,50 @@ import { BaseMetadataModel } from '../models/metadata-models';
     selector: 'form-group',
     templateUrl: './form-group.component.html'
 })
-export class FormGroupComponent extends AbstractFormComponent {
-
-    private readonly typeMetadataObservable: Observable<TypeMetadataModel>;
-    /**
-     * Controls contained in the group.
-     */
-    readonly formComponentModels: FormComponentModel[];
-    groups: { [group: string]: FormComponentModel[] };
+export class FormGroupComponent extends AbstractFormComponent implements OnInit {
+    private metadataKeyInternal: string;
+    private initialized: boolean;
+    groups: { [group: string]: AbstractFormModel[] };
     groupKeys: string[];
 
+
+    @Input() set metadataKey(val: string) {
+        this.metadataKeyInternal = val;
+        this.metadataService.getMetadata(this.metadataKeyInternal).first().subscribe(m => {
+            const model = new FormGroupModel(m, this.injector);
+            this.model = model;
+            if (this.initialized) {
+                this.initGroups();
+            }
+        });
+    };
+
+    get metadataKey(): string {
+        return this.metadataKeyInternal;
+    }
+
+    get formModel(): FormGroupModel {
+        return this.model as FormGroupModel;
+    }
 
     /**
      * Constructor. 
      * @param typeMetadata
      * @param typeConverterService
      */
-    constructor(private readonly metadataService: MetadataService, private readonly componentFactory: FormComponentFactoryService ) {
+    constructor(private readonly metadataService: MetadataService, private readonly injector: Injector) {
         super();
-        this.formComponentModels = [];
-        this.typeMetadataObservable = this.metadata.map(v => v as TypeMetadataModel);
+        this.initialized = false;
     }
 
     private initGroups(): void {
-        const groups: { [group: string]: FormComponentModel[] } = {};
+        const groups: { [group: string]: AbstractFormModel[] } = {};
         const groupKeys: string[] = [];
-        for (let i = 0; i < this.formComponentModels.length; i++) {
-            const model = this.formComponentModels[i];
+        for (let i = 0; i < this.formModel.properties.length; i++) {
+            const model = this.formModel.properties[i];
             const group = model.metadata.additionalData ? (model.metadata.additionalData['group']) || '' : '';
             if (!groups[group]) {
-                groups[group] = [] as FormComponentModel[];
+                groups[group] = [] as AbstractFormModel[];
                 groupKeys.push(group);
             }
             groups[group].push(model);
@@ -64,34 +74,10 @@ export class FormGroupComponent extends AbstractFormComponent {
         this.groups = groups;
     }
 
-    /** @inheritdoc */
-    protected createFormControl(metadata: BaseMetadataModel): Observable<AbstractControl> {
-        const typeMetadata = metadata as TypeMetadataModel;
-        const group: { [key: string]: AbstractControl } = {};
-        const formSubject = new ReplaySubject<AbstractControl>(1);
-        let remainingCount = typeMetadata.properties.length;
-        for (let i = 0; i < typeMetadata.properties.length; i++) {
-            const componentModel = this.componentFactory.getFormComponentModel(typeMetadata.properties[i]);
-            this.formComponentModels.push(componentModel);
-            componentModel.control.first().subscribe(c => {
-                group[componentModel.metadata.name] = c;
-                if (--remainingCount === 0) {
-                    formSubject.next(new FormGroup(group));
-                    formSubject.complete();
-                }
-            });
+    ngOnInit(): void {
+        this.initialized = true;
+        if (this.formModel) {
+            this.initGroups();    
         }
-
-        this.initGroups();
-        return formSubject.asObservable();
-    }
-
-    /** @inheritdoc */
-    get value(): any {
-        return null;
-    }
-
-    /** @inheritdoc */
-    set value(newVal: any) {
     }
 }

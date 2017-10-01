@@ -21,17 +21,19 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
+    <Compile Include="playground\index.js" />
+    <Compile Include="playground\systemjs-angular-loader.js" />
+    <Compile Include="playground\systemjs.config.js" />
+    <Compile Include="tools\gulp\inline-resources.js" />
     <Content Include=".gitignore" />
     <Content Include=".npmignore" />
     <Content Include=".travis.yml" />
     <Content Include=".yo-rc.json" />
     <Content Include="bs-config.json" />
     <Content Include="package.json" />
+    <Content Include="playground\index.html" />
+    <Content Include="playground\tsconfig.json" />
     <Content Include="src\components\form-group.component.html" />
-    <Content Include="src\components\form-input-hidden.component.html" />
-    <Content Include="src\components\form-input-hidden.component.ts">
-      <SubType>Code</SubType>
-    </Content>
     <Content Include="src\components\form-input-host.component.html" />
     <Content Include="src\components\form-input-text.component.html" />
     <Content Include="src\components\validation-errors.component.html" />
@@ -41,14 +43,12 @@
     <Content Include="tsconfig.json" />
     <Content Include="README.MD" />
     <Content Include="tslint.json" />
+    <TypeScriptCompile Include="playground\index.ts" />
     <TypeScriptCompile Include="src\components\form-input-host.component.ts" />
     <TypeScriptCompile Include="src\components\form-input-text.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\components\abstract-form.component.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="src\components\abstract-input.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\components\form-group.component.ts">
@@ -57,7 +57,18 @@
     <TypeScriptCompile Include="src\components\validation-errors.component.ts" />
     <TypeScriptCompile Include="src\directives\form-host.directive.ts" />
     <TypeScriptCompile Include="src\index.ts" />
-    <TypeScriptCompile Include="src\models\form-component.model.ts" />
+    <TypeScriptCompile Include="src\models\abstract-form-model.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\models\abstract-input-model.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\models\form-group-model.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\models\input-text-model.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\models\metadata-models.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -88,12 +99,15 @@
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="playground\" />
     <Folder Include="src" />
     <Folder Include="src\directives\" />
     <Folder Include="src\models\" />
     <Folder Include="src\components\" />
     <Folder Include="src\modules\" />
     <Folder Include="src\services\" />
+    <Folder Include="tools\" />
+    <Folder Include="tools\gulp\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <!--Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them.-->

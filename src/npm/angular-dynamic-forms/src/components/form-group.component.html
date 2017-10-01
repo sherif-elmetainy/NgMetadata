@@ -1,7 +1,7 @@
 ﻿<ng-container *ngFor="let group of groupKeys">
     <div [attr.class]="formGroupCssClassName">
-        <ng-container *ngFor="let childElement of groups[group]">
-            <form-input-host [formComponentModel]="childElement"></form-input-host>
+        <ng-container *ngFor="let childModel of groups[group]">
+            <form-input-host [model]="childModel"></form-input-host>
         </ng-container>
     </div>
 </ng-container>

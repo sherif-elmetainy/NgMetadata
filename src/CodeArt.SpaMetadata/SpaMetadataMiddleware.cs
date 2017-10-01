@@ -57,7 +57,6 @@ namespace CodeArt.SpaMetadata
 				var json = _options.MetadataSerializerSettings == null ? JsonConvert.SerializeObject(data) : JsonConvert.SerializeObject(data, _options.MetadataSerializerSettings);
 				await context.Response.WriteAsync(json);
 		    }
-		    await _nextDelegate(context);
 	    }
 	}
 }

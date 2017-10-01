@@ -150,7 +150,8 @@ namespace CodeArt.SpaMetadata
 			    Description = typeMetadataProperty.Description,
 			    PlaceHolderText = typeMetadataProperty.Placeholder,
 			    Key = typeMetadataProperty.PropertyName,
-			    Order = typeMetadataProperty.Order
+			    Order = typeMetadataProperty.Order,
+				TypeName = GetBuildInType(typeMetadataProperty.ModelType)
 		    };
 
 		    if (_propertyMetadataProcessors != null)

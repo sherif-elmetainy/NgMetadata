@@ -1,6 +1,6 @@
-﻿import { Component, AfterViewInit, ViewChild, Input, ComponentFactoryResolver } from '@angular/core';
+﻿import { Component, AfterViewInit, ViewChild, Input, ComponentFactoryResolver, ChangeDetectorRef } from '@angular/core';
 import { FormHostDirective } from '../directives/form-host.directive';
-import { FormComponentModel } from '../models/form-component.model';
+import { AbstractFormModel } from '../models/abstract-form-model';
 
 /** @internal */
 @Component({
@@ -11,31 +11,32 @@ export class FormInputHostComponent implements AfterViewInit {
 
     @ViewChild(FormHostDirective) hostChild: FormHostDirective;
 
-    private formComponentModelInternal: FormComponentModel | null;
+    private modelInternal: AbstractFormModel | null;
     intputType: string = 'text';
     cssClassName: string = 'form-control';
 
     @Input()
-    set formComponentModel(val: FormComponentModel|null) {
-        this.formComponentModelInternal = val;
+    set model(val: AbstractFormModel|null) {
+        this.modelInternal = val;
         if (this.viewInitialized) {
             this.loadComponent();
         }
     }
 
-    get formComponentModel(): FormComponentModel|null {
-        return this.formComponentModelInternal;
+    get model(): AbstractFormModel|null {
+        return this.modelInternal;
     }
+
     private viewInitialized: boolean;
 
-    constructor(private readonly componentFactoryResolver: ComponentFactoryResolver) {
+    constructor(private readonly componentFactoryResolver: ComponentFactoryResolver, private readonly changeDetector: ChangeDetectorRef) {
         this.viewInitialized = false;
-        this.formComponentModelInternal = null;
+        this.modelInternal = null;
     }
 
     ngAfterViewInit(): void {
         this.viewInitialized = true;
-        if (this.formComponentModel) {
+        if (this.model !== null) {
             this.loadComponent();
         }
     }
@@ -43,13 +44,14 @@ export class FormInputHostComponent implements AfterViewInit {
     private loadComponent(): void {
         const viewContainerRef = this.hostChild.viewContainerRef;
         viewContainerRef.clear();
-        if (this.formComponentModel) {
-            const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.formComponentModel.type);
+        if (this.model) {
+            const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.model.componentType);
             const componentRef = viewContainerRef.createComponent(componentFactory);
 
             const component = componentRef.instance;
-            this.formComponentModel.setComponent(component);
-            component.setMetadata(this.formComponentModel.metadata);
+            component.model = this.model;
+
+            this.changeDetector.detectChanges();
         }
     }
 }
