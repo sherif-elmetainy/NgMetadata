@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
+﻿using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -10,15 +7,15 @@ namespace CodeArt.SpaMetadata.Processors
 {
     public class DefaultNamesProcessor : ITypeMetadataProcessor, IPropertyMetadataProcessor
     {
-	    public bool CanProcess(ModelMetadata typeModelMetadata) => true;
+	    public virtual bool CanProcess(ModelMetadata typeModelMetadata) => true;
 	    
-	    public Task ProcessProperty(ModelMetadata propertyModelMetadata, PropertyModelInformation propertyModelInformation)
+	    public virtual Task ProcessProperty(ModelMetadata propertyModelMetadata, PropertyModelInformation propertyModelInformation)
 	    {
 			ProcessModelInformation(propertyModelInformation);
 		    return Task.CompletedTask;
 		}
 
-	    public Task ProcessType(ModelMetadata typeModelMetadata, TypeModelInformation typeModelInformation)
+	    public virtual Task ProcessType(ModelMetadata typeModelMetadata, TypeModelInformation typeModelInformation)
 	    {
 			ProcessModelInformation(typeModelInformation);
 			return Task.CompletedTask;
@@ -47,6 +44,5 @@ namespace CodeArt.SpaMetadata.Processors
 			var allNonstartingCapitals = new Regex("(?<=\\P{Lu})\\p{Lu}(?!\\p{Lu})");
 			return allNonstartingCapitals.Replace(pascalOrCamelCaseName, m => " " + m.Value.ToLower(CultureInfo.CurrentUICulture));
 	    }
-
 	}
 }

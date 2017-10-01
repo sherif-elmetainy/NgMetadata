@@ -1,4 +1,4 @@
 ﻿<input [formControl]="model.control"
        [id]="model.metadata.name"
-       type="text"
-       [attr.class]="cssClassName" />
+       [attr.type]="model.inputType"
+       [attr.class]="cssClassName" [attr.placeholder]="model.metadata.placeHolderText" />

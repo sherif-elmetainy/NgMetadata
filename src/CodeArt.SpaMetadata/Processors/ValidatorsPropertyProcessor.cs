@@ -33,9 +33,9 @@ namespace CodeArt.SpaMetadata.Processors
 
 		}
 
-		public bool CanProcess(ModelMetadata propertyModelMetadata) => true;
+		public virtual bool CanProcess(ModelMetadata propertyModelMetadata) => true;
 	    
-	    public Task ProcessProperty(ModelMetadata propertyModelMetadata, PropertyModelInformation propertyModelInformation)
+	    public virtual Task ProcessProperty(ModelMetadata propertyModelMetadata, PropertyModelInformation propertyModelInformation)
 	    {
 			var validators = _clientValidatorCache.GetValidators(
 				propertyModelMetadata,

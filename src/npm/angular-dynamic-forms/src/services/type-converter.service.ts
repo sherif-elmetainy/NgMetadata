@@ -1,11 +1,37 @@
-﻿import { Injectable, Inject } from '@angular/core';
+﻿import { Injectable, Inject, InjectionToken } from '@angular/core';
 import { IGlobalizationService, SPA_METADATA_GLOBALIZATION_SERVICE } from './iglobalization.service';
+
+// ReSharper disable once InconsistentNaming
+export const SPA_METADATA_TYPE_CONVERTER_SERVICE = new InjectionToken<ITypeConverterService>('ITypeConverterService');
+
+export interface ITypeConverterService {
+    /**
+     * Convert a value to string
+     * @param val
+     */
+    convertToString(val: any): string | null;
+    /**
+     * converts a value to boolean
+     * @param val
+     */
+    convertToBoolean(val: any): boolean;
+    /**
+     * Converts a value to a number
+     * @param val
+     */
+    convertToNumber(val: any): number | null;
+    /**
+     * Converts a value to a date
+     * @param val
+     */
+    convertToDate(val: any): Date | null;
+}
 
 /**
  * injectable service to perform type conversions.
  */
 @Injectable()
-export class TypeConverterService {
+export class TypeConverterService implements ITypeConverterService {
 
     /**
      * constructor. 

@@ -7,12 +7,7 @@ import { AbstractFormModel } from '../models/abstract-form-model';
 export abstract class AbstractFormComponent {
 
     @Input() model: AbstractFormModel;
-    
-    /**
-     * Constuctor. initializes a new instance of AbstractFormMetadata
-     * @param metadata - metadata information that was retrieved from the server.
-     * @param typeConverterService - A type converter service
-     */
+
     protected constructor() {
     }
 }

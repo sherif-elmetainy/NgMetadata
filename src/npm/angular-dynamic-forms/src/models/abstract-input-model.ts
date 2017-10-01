@@ -3,19 +3,19 @@ import { ValidatorFn, AbstractControl } from '@angular/forms';
 
 import { AbstractFormModel } from './abstract-form-model';
 import { PropertyMetadataModel } from './metadata-models';
-import {TypeConverterService} from '../services/type-converter.service';
+import { ITypeConverterService, SPA_METADATA_TYPE_CONVERTER_SERVICE} from '../services/type-converter.service';
 
 export abstract class AbstractInputModel extends AbstractFormModel {
-    private typeConverterServiceInternal: TypeConverterService | null;
+    private typeConverterServiceInternal: ITypeConverterService | null;
 
     protected constructor(public readonly propertyMetadata: PropertyMetadataModel, injector: Injector) {
         super(propertyMetadata, injector);
         this.typeConverterServiceInternal = null;
     }
 
-    protected get typeConverterService(): TypeConverterService {
+    protected get typeConverterService(): ITypeConverterService {
         if (this.typeConverterServiceInternal === null) {
-            this.typeConverterServiceInternal = this.injector.get(TypeConverterService);
+            this.typeConverterServiceInternal = this.injector.get(SPA_METADATA_TYPE_CONVERTER_SERVICE);
         }
         return this.typeConverterServiceInternal;
     }

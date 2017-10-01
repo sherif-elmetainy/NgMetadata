@@ -1,6 +1,4 @@
-﻿import 'rxjs/add/operator/startWith';
-
-import { Component } from '@angular/core';
+﻿import { Component } from '@angular/core';
 
 import { AbstractFormComponent } from './abstract-form.component';
 

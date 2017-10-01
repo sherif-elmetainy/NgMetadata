@@ -36,6 +36,9 @@
     <Content Include="src\components\form-group.component.html" />
     <Content Include="src\components\form-input-host.component.html" />
     <Content Include="src\components\form-input-text.component.html" />
+    <Content Include="src\components\form-multiline.component.html">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\components\validation-errors.component.html" />
     <Content Include="src\package.json" />
     <Content Include="src\tsconfig.es5.json" />
@@ -54,8 +57,17 @@
     <TypeScriptCompile Include="src\components\form-group.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\components\form-multiline.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\components\validation-errors.component.ts" />
+    <TypeScriptCompile Include="src\directives\change-tag.directive.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\directives\form-host.directive.ts" />
+    <TypeScriptCompile Include="src\directives\remove-host-tag.directive.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\index.ts" />
     <TypeScriptCompile Include="src\models\abstract-form-model.ts">
       <SubType>Code</SubType>
@@ -69,12 +81,18 @@
     <TypeScriptCompile Include="src\models\input-text-model.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\models\integer-model.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\models\metadata-models.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <Compile Include="gulpfile.js">
       <SubType>Code</SubType>
     </Compile>
+    <TypeScriptCompile Include="src\models\numeric-model.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\modules\angular-dynamic-forms-services.module.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

@@ -20,10 +20,12 @@ namespace Microsoft.Extensions.DependencyInjection
 	    public static SpaMetadataBuilder AddSpaMetadata(this IServiceCollection services)
 	    {
 		    var builder = new SpaMetadataBuilder(services);
-		    services.AddSingleton<ISpaMetadataService, SpaMetadataService>();
+		    services.AddScoped<ISpaMetadataService, SpaMetadataService>();
+
 		    services.AddSingleton<ITypeMetadataProcessor, DefaultNamesProcessor>();
 		    services.AddSingleton<IPropertyMetadataProcessor, DefaultNamesProcessor>();
 		    services.AddSingleton<IPropertyMetadataProcessor, ValidatorsPropertyProcessor>();
+		    services.AddSingleton<IPropertyMetadataProcessor, DataTypeProcessor>();
 
 			return builder;
 	    }

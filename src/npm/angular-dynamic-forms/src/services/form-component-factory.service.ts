@@ -3,7 +3,9 @@
 import { PropertyMetadataModel } from '../models/metadata-models';
 import { AbstractFormModel } from '../models/abstract-form-model';
 import { FormGroupModel } from '../models/form-group-model';
-import {InputTextModel} from '../models/input-text-model';
+import { InputTextModel } from '../models/input-text-model';
+import { NumericModel } from '../models/numeric-model';
+import { IntegerModel } from '../models/integer-model';
 
 export type FormModelFactory = (metadata: PropertyMetadataModel, injector: Injector) => AbstractFormModel;
 export type ResolveFormModelFn = (metadata: PropertyMetadataModel) => FormModelFactory;
@@ -23,6 +25,8 @@ export class FormComponentFactoryService {
     constructor(private readonly injector: Injector) {
         this.modelResolvers = [];
         this.registerTypeName('string', (p, i) => new InputTextModel(p, i));
+        this.registerTypeName('number',  (p, i) => new NumericModel(p, i));
+        this.registerTypeName('int', (p, i) => new IntegerModel(p, i));
     }
 
     registerTypeName(typeName: string, factory: FormModelFactory): void {

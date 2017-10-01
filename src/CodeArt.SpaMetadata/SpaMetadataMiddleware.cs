@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
@@ -14,34 +15,31 @@ namespace CodeArt.SpaMetadata
     {
 	    private static readonly string[] VaryHeaders = { "Accept-Language" };
 		private readonly SpaMetadataOptions _options;
-	    private readonly ISpaMetadataService _ngMetadataService;
 	    private readonly RequestDelegate _nextDelegate;
+	    private readonly Formatting _jsonFormatting;
 
 	    /// <summary>
 	    /// constructor.
 	    /// </summary>
-	    /// <param name="ngMetadataService"></param>
 	    /// <param name="nextDelegate"></param>
 	    /// <param name="options"></param>
-	    public SpaMetadataMiddleware(ISpaMetadataService ngMetadataService,
+	    /// <param name="environment"></param>
+	    public SpaMetadataMiddleware(
 			RequestDelegate nextDelegate,
-			IOptions<SpaMetadataOptions> options
+			IOptions<SpaMetadataOptions> options,
+			IHostingEnvironment environment
 			)
 	    {
 		    _options = options.Value;
-		    _ngMetadataService = ngMetadataService ?? throw new ArgumentNullException(nameof(ngMetadataService));
 		    _nextDelegate = nextDelegate ?? throw new ArgumentNullException(nameof(nextDelegate));
+		    _jsonFormatting = environment.IsDevelopment() ? Formatting.Indented : Formatting.None;
 	    }
 
-	    public async Task Invoke(HttpContext context)
+	    public async Task Invoke(HttpContext context, ISpaMetadataService spaMetadataService)
 	    {
 		    var path = context.Request.Path;
-		    var data = await _ngMetadataService.GetModelMetadataInformation(path);
-		    if (data == null)
-		    {
-			    context.Response.StatusCode = 404;
-		    }
-		    else
+		    var data = await spaMetadataService.GetModelMetadataInformation(path);
+		    if (data != null)
 		    {
 			    context.Response.ContentType = "application/json";
 			    if (_options.EnableResponseCaching)
@@ -54,9 +52,11 @@ namespace CodeArt.SpaMetadata
 					
 					context.Response.Headers[HeaderNames.Vary] = VaryHeaders;
 			    }
-				var json = _options.MetadataSerializerSettings == null ? JsonConvert.SerializeObject(data) : JsonConvert.SerializeObject(data, _options.MetadataSerializerSettings);
+				var json = _options.MetadataSerializerSettings == null ? JsonConvert.SerializeObject(data, _jsonFormatting) : JsonConvert.SerializeObject(data, _jsonFormatting, _options.MetadataSerializerSettings);
 				await context.Response.WriteAsync(json);
+				return;
 		    }
+		    await _nextDelegate(context);
 	    }
 	}
 }

@@ -4,15 +4,31 @@ import { FormControl, AbstractControl } from '@angular/forms';
 import { AbstractInputModel } from './abstract-input-model';
 import { PropertyMetadataModel } from './metadata-models';
 import { FormInputTextComponent } from '../components/form-input-text.component';
-import { AbstractFormComponent } from 'components/abstract-form.component';
+import { AbstractFormComponent } from '../components/abstract-form.component';
+import { FormMultilineComponent } from '../components/form-multiline.component';
 
 export class InputTextModel extends AbstractInputModel {
+    private val: string;
     constructor(propertyMetadata: PropertyMetadataModel, injector: Injector) {
         super(propertyMetadata, injector);
     }
 
-    private val: any;
+    get inputType(): string {
+        if (this.propertyMetadata.additionalData) {
+            if (this.propertyMetadata.additionalData['password'])
+                return 'password';
+        }
+        return 'text';    
+    }
 
+    get isMultiline(): boolean {
+        if (this.propertyMetadata.additionalData) {
+            if (this.propertyMetadata.additionalData['multiline'])
+                return true;
+        }
+        return false;    
+    }
+    
     get value(): any {
         if (this.control !== null) {
             return this.typeConverterService.convertToString(this.control.value);
@@ -20,15 +36,15 @@ export class InputTextModel extends AbstractInputModel {
         return this.val;
     }
 
-    get componentType(): Type<AbstractFormComponent> {
-        return FormInputTextComponent;
-    }
-
     set value(newVal: any) {
         this.val = newVal;
         if (this.control !== null) {
             this.control.setValue(this.typeConverterService.convertToString(this.val));
         }
+    }
+
+    get componentType(): Type<AbstractFormComponent> {
+        return this.isMultiline ? FormMultilineComponent : FormInputTextComponent;
     }
 
     protected createFormControl(): AbstractControl {
