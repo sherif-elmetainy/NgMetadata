@@ -12,7 +12,8 @@ export { TypeConverterService, ITypeConverterService, SPA_METADATA_TYPE_CONVERTE
 export { SPA_METADATA_GLOBALIZATION_SERVICE, IGlobalizationService } from './services/iglobalization.service';
 export { SPA_METADATA_BASE_URL, MetadataService } from './services/metadata.service';
 export { FormComponentFactoryService, FormModelFactory, ResolveFormModelFn } from './services/form-component-factory.service';
-export { DefaultGlobalizationService } from './services/default-globalization-service';
+export { DefaultGlobalizationService, SPA_METADATA_GLOBALIZE_STATIC } from './services/default-globalization-service';
+export { SPA_METADATA_CULTURE_SERVICE, SPA_METADATA_SUPPORTED_CULTURES, ICultureService } from './services/current-culture.service';
 
 export { BaseMetadataModel, TypeMetadataModel, PropertyMetadataModel } from './models/metadata-models';
 export { AbstractFormModel } from './models/abstract-form-model';

@@ -1,2 +1,7 @@
 ﻿<h1>Example form</h1>
+
+<div>
+    <button [class.btn-info]="culture == 'en-GB'" class="btn" (click)="culture = 'en-GB'">English (United Kingdom)</button>
+    <button [class.btn-info]="culture == 'de'" class="btn" (click)="culture = 'de'">German (Germany)</button>
+</div>
 <form-group [metadataKey]="key"></form-group>

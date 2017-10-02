@@ -41,6 +41,9 @@
     </Content>
     <Content Include="src\components\validation-errors.component.html" />
     <Content Include="src\package.json" />
+    <Content Include="src\services\current-culture.service.ts">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\tsconfig.es5.json" />
     <Content Include="src\tsconfig.spec.json" />
     <Content Include="tsconfig.json" />

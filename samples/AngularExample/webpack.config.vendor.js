@@ -11,8 +11,7 @@ const treeShakableModules = [
     '@angular/http',
     '@angular/platform-browser',
     '@angular/platform-browser-dynamic',
-    '@angular/router',
-    'zone.js'
+    '@angular/router'
 ];
 const nonTreeShakableModules = [
     'bootstrap',
@@ -20,7 +19,15 @@ const nonTreeShakableModules = [
     'es6-promise',
     'es6-shim',
     'event-source-polyfill',
-    'jquery'
+    'jquery',
+    'globalize',
+    'cldr-data/supplemental/likelySubtags.json',
+    'cldr-data/supplemental/timeData.json',
+    'cldr-data/supplemental/weekData.json',
+    'cldr-data/supplemental/numberingSystems.json',
+    'cldr-data/main/en/ca-gregorian.json',
+    'cldr-data/main/en/timeZoneNames.json',
+    'cldr-data/main/en/numbers.json'
 ];
 const allModules = treeShakableModules.concat(nonTreeShakableModules);
 
@@ -33,7 +40,8 @@ module.exports = (env) => {
         resolve: { extensions: [ '.js' ] },
         module: {
             rules: [
-                { test: /\.(png|woff|woff2|eot|ttf|svg)(\?|$)/, use: 'url-loader?limit=100000' }
+                { test: /\.(png|woff|woff2|eot|ttf|svg)(\?|$)/, use: 'url-loader?limit=100000' },
+                { test: /globalize/, loader: 'imports-loader?define=>false' }
             ]
         },
         output: {

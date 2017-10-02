@@ -11,7 +11,7 @@
     ],
     "target": "es5",
     "skipLibCheck": true,
-    "types": [],
+    "types": ["globalize", "node"],
     "paths": {
       "@code-art/angular-dynamic-forms": [ "index.ts" ]
     }
