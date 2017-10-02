@@ -13,7 +13,7 @@ import { CounterComponent } from './components/counter/counter.component';
 import { ExampleFormComponent } from './components/example-form/example-form.component';
 
 import { AngularDynamicFormsModule, AngularDynamicFormsServicesModule } from '@code-art/angular-dynamic-forms';
-import { SPA_METADATA_SUPPORTED_CULTURES, SPA_METADATA_GLOBALIZE_STATIC } from '@code-art/angular-dynamic-forms'
+import { SPA_METADATA_SUPPORTED_CULTURES, SPA_METADATA_GLOBALIZE_STATIC } from '@code-art/angular-dynamic-forms';
 
 @NgModule({
     declarations: [

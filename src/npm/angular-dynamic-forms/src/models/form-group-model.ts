@@ -4,7 +4,7 @@ import { Injector, Type } from '@angular/core';
 import { AbstractFormModel } from './abstract-form-model';
 import { AbstractFormComponent } from '../components/abstract-form.component';
 import { FormGroupComponent } from '../components/form-group.component';
-import { TypeMetadataModel } from './metadata-models';
+import { TypeMetadataModel, BaseMetadataModel } from './metadata-models';
 import { FormComponentFactoryService } from '../services/form-component-factory.service';
 
 export class FormGroupModel extends AbstractFormModel {
@@ -25,7 +25,7 @@ export class FormGroupModel extends AbstractFormModel {
         const group: { [key: string]: AbstractControl } = {};
 
         this.properties.forEach(fi => {
-            group[fi.metadata.name] = fi.control;
+            group[fi.metadata.key] = fi.control;
         });
 
         return new FormGroup(group);
@@ -36,7 +36,7 @@ export class FormGroupModel extends AbstractFormModel {
     get value(): any {
         const res: { [key: string]: any } = {};
         for (let i = 0; i < this.properties.length; i++) {
-            res[this.properties[i].metadata.name] = this.properties[i].value;
+            res[this.properties[i].metadata.key] = this.properties[i].value;
         }
         return res;
     }
@@ -44,9 +44,24 @@ export class FormGroupModel extends AbstractFormModel {
     set value(newVal: any) {
         this.val = newVal || {};
         for (let i = 0; i < this.properties.length; i++) {
-            this.properties[i].value = newVal[this.properties[i].metadata.name];
+            this.properties[i].value = newVal[this.properties[i].metadata.key];
         }
     }
 
     get componentType(): Type<AbstractFormComponent> { return FormGroupComponent }
+
+    applyChanges(metadata: BaseMetadataModel): void {
+        super.applyChanges(metadata);
+        const typeMetadata = metadata as TypeMetadataModel;
+        if (typeMetadata.properties.length !== this.properties.length) {
+            throw `Failed to apply changes to from group model. Propery length mitmatch. Old length ${this.properties.length} and new length ${this.properties.length}.`;
+        }
+        for (let i = 0; i < typeMetadata.properties.length; i++) {
+            if (this.properties[i] instanceof FormGroupModel) {
+                this.properties[i].applyChanges(typeMetadata.properties[i].type);
+            } else {
+                this.properties[i].applyChanges(typeMetadata.properties[i]);
+            }
+        }
+    }
 }

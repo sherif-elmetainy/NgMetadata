@@ -1,15 +1,30 @@
 ﻿import { Injector, Type } from '@angular/core';
+import { AbstractControl } from '@angular/forms';
 
 import { InputTextModel } from './input-text-model';
-import { PropertyMetadataModel } from './metadata-models';
+import { PropertyMetadataModel, BaseMetadataModel } from './metadata-models';
 import { FormInputTextComponent } from '../components/form-input-text.component';
 import { AbstractFormComponent } from '../components/abstract-form.component';
 
 export class NumericModel extends InputTextModel {
     private numericVal: number | null;
+    private lastValueValid: boolean;
 
     constructor(propertyMetadata: PropertyMetadataModel, injector: Injector) {
         super(propertyMetadata, injector);
+        this.lastValueValid = false;
+    }
+
+    protected createFormControl(): AbstractControl {
+        const c = super.createFormControl();
+        c.valueChanges.subscribe(n => {
+            const v = this.typeConverterService.convertToNumber(n);
+            this.lastValueValid = typeof v === 'number';
+            if (this.lastValueValid) {
+                this.numericVal = v;
+            }
+        });
+        return c;
     }
 
     get value(): any {
@@ -22,7 +37,7 @@ export class NumericModel extends InputTextModel {
     set value(newVal: any) {
         this.numericVal = this.typeConverterService.convertToNumber(newVal);
         if (this.control !== null) {
-            this.control.setValue(this.numericVal);
+            this.control.setValue(this.typeConverterService.convertToString(this.numericVal));
         }
     }
 
@@ -36,5 +51,14 @@ export class NumericModel extends InputTextModel {
 
     get inputType(): string {
         return 'text';
+    }
+
+    applyChanges(metadata: BaseMetadataModel): void {
+        super.applyChanges(metadata);
+        if (this.lastValueValid) {
+            if (this.value !== this.numericVal) {
+                this.value = this.numericVal;
+            }
+        }
     }
 }

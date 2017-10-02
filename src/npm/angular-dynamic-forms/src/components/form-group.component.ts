@@ -1,7 +1,5 @@
-﻿import { Component, OnInit, Input, Injector } from '@angular/core';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/first';
-
+﻿import { Component, OnInit, Input, Injector, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 
 import { AbstractFormComponent } from './abstract-form.component';
 import { MetadataService } from '../services/metadata.service';
@@ -16,20 +14,27 @@ import { FormGroupModel } from '../models/form-group-model';
     selector: 'form-group',
     templateUrl: './form-group.component.html'
 })
-export class FormGroupComponent extends AbstractFormComponent implements OnInit {
+export class FormGroupComponent extends AbstractFormComponent implements OnInit, OnDestroy {
+    
     private metadataKeyInternal: string;
     private initialized: boolean;
+    private metadataSubsription: Subscription|null;
+
     groups: { [group: string]: AbstractFormModel[] };
     groupKeys: string[];
 
 
     @Input() set metadataKey(val: string) {
         this.metadataKeyInternal = val;
-        this.metadataService.getMetadata(this.metadataKeyInternal).first().subscribe(m => {
-            const model = new FormGroupModel(m, this.injector);
-            this.model = model;
-            if (this.initialized) {
-                this.initGroups();
+        this.metadataSubsription = this.metadataService.getMetadata(this.metadataKeyInternal).subscribe(m => {
+            if (!this.model) {
+                const model = new FormGroupModel(m, this.injector);
+                this.model = model;
+                if (this.initialized) {
+                    this.initGroups();
+                }
+            } else {
+                this.model.applyChanges(m);
             }
         });
     };
@@ -50,6 +55,7 @@ export class FormGroupComponent extends AbstractFormComponent implements OnInit 
     constructor(private readonly metadataService: MetadataService, private readonly injector: Injector) {
         super();
         this.initialized = false;
+        this.metadataSubsription = null;
     }
 
     private initGroups(): void {
@@ -78,6 +84,12 @@ export class FormGroupComponent extends AbstractFormComponent implements OnInit 
         this.initialized = true;
         if (this.formModel) {
             this.initGroups();    
+        }
+    }
+
+    ngOnDestroy(): void {
+        if (this.metadataSubsription !== null) {
+            this.metadataSubsription.unsubscribe();
         }
     }
 }

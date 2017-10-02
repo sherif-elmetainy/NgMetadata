@@ -2,7 +2,7 @@
 import { ValidatorFn, AbstractControl } from '@angular/forms';
 
 import { AbstractFormModel } from './abstract-form-model';
-import { PropertyMetadataModel } from './metadata-models';
+import { PropertyMetadataModel, BaseMetadataModel } from './metadata-models';
 import { ITypeConverterService, SPA_METADATA_TYPE_CONVERTER_SERVICE} from '../services/type-converter.service';
 
 export abstract class AbstractInputModel extends AbstractFormModel {
@@ -198,18 +198,54 @@ export abstract class AbstractInputModel extends AbstractFormModel {
             const val = c.value;
             if (this.isEmpty(val)) {
                 if (key === 'required') {
-                    return { key: message };
+                    // Need to access the propertyMetadata rather than the message const because it can be changed
+                    const error = {};
+                    error[key] = this.propertyMetadata.validationData[key];
+                    return error;
                 } else {
                     return null;
                 }
             }
             if (validationFunction !== null) {
                 if (!validationFunction.apply(this, [val])) {
-                    return { key: message };
+                    // Need to access the propertyMetadata rather than the message const because it can be changed
+                    const error = {};
+                    error[key] = this.propertyMetadata.validationData[key];
+                    return error;
                 }
             }
             return null;
         };
     }
 
+    applyChanges(metadata: BaseMetadataModel): void {
+        super.applyChanges(metadata);
+        const propertyMetadata = metadata as PropertyMetadataModel;
+        if (this.propertyMetadata.typeName !== propertyMetadata.typeName) {
+            throw `Failed to apply changes to property metadata since type name changed. Old type ${this.propertyMetadata.typeName}, new type ${propertyMetadata.typeName}.`;
+        }
+        if (this.propertyMetadata.isCollection !== propertyMetadata.isCollection) {
+            throw `Failed to apply changes to property metadata since isCollection property changed. Old value ${this.propertyMetadata.isCollection}, new value ${propertyMetadata.isCollection}.`;
+        }
+        if (this.propertyMetadata.isEnum !== propertyMetadata.isEnum) {
+            throw `Failed to apply changes to property metadata since isEnum property changed. Old value ${this.propertyMetadata.isCollection}, new value ${propertyMetadata.isCollection}.`;
+        }
+        const newKeys = Object.keys(propertyMetadata.validationData);
+        const oldKeys = Object.keys(this.propertyMetadata.validationData);
+        if (newKeys.length !== oldKeys.length) {
+            throw `Failed to apply changes to property metadata since validationData has different keys. Old value ${oldKeys.length} keys, new value ${newKeys.length} keys.`;
+        }
+        if (newKeys.findIndex(v => oldKeys.indexOf(v) < 0) >= 0)
+            throw `Failed to apply changes to property metadata since validationData has different keys. Old value ${JSON.stringify(oldKeys)} keys, new value ${JSON.stringify(newKeys)} keys.`;
+        for (let i = 0; i < newKeys.length; i++) {
+            const key = newKeys[i];
+            this.propertyMetadata.validationData[key] = propertyMetadata.validationData[key];
+            if (this.control && this.control.errors && this.control.errors[key]) {
+                const errors = {};
+                errors[key] = propertyMetadata.validationData[key];
+                this.control.setErrors(errors);
+            }
+        }
+        this.propertyMetadata.placeHolderText = propertyMetadata.placeHolderText;
+    }
 }

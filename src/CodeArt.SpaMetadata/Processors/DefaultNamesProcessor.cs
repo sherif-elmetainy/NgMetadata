@@ -24,7 +24,7 @@ namespace CodeArt.SpaMetadata.Processors
 	    private static void ProcessModelInformation(ModelInformation modelInformation)
 	    {
 		    if (modelInformation.DisplayName == null)
-			    modelInformation.DisplayName = SplitWords(modelInformation.Key);
+			    modelInformation.DisplayName = SplitWords(modelInformation.Name);
 		    if (modelInformation.ShortName == null)
 			    modelInformation.ShortName = modelInformation.DisplayName;
 	    }

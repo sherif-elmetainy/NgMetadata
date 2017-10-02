@@ -2,7 +2,7 @@
 import { FormControl, AbstractControl } from '@angular/forms';
 
 import { AbstractInputModel } from './abstract-input-model';
-import { PropertyMetadataModel } from './metadata-models';
+import { PropertyMetadataModel, BaseMetadataModel } from './metadata-models';
 import { FormInputTextComponent } from '../components/form-input-text.component';
 import { AbstractFormComponent } from '../components/abstract-form.component';
 import { FormMultilineComponent } from '../components/form-multiline.component';
@@ -49,5 +49,15 @@ export class InputTextModel extends AbstractInputModel {
 
     protected createFormControl(): AbstractControl {
         return new FormControl(this.typeConverterService.convertToString(this.val), this.createValidators());
+    }
+
+    applyChanges(metadata: BaseMetadataModel) : void {
+        super.applyChanges(metadata);
+        if (this.propertyMetadata.additionalData['password'] !== metadata.additionalData['password']) {
+            throw `Failed to apply changes to property metadata since password property additional metadata changed.`;
+        }
+        if (this.propertyMetadata.additionalData['multiline'] !== metadata.additionalData['multiline']) {
+            throw `Failed to apply changes to property metadata since multiline property additional metadata changed.`;
+        }
     }
 }

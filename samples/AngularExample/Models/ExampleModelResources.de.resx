@@ -118,18 +118,18 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Email" xml:space="preserve">
-    <value>Email address</value>
+    <value>Email addresse</value>
   </data>
   <data name="EmailValidation" xml:space="preserve">
-    <value>Please enter a valid email address.</value>
+    <value>Bitte geben Sie eine gültige E-Mail-Adresse ein.</value>
   </data>
   <data name="InvalidUrl" xml:space="preserve">
-    <value>Please enter a valid url.</value>
+    <value>Bitte geben Sie eine gültige URL ein</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Full name</value>
+    <value>Vollständiger Name</value>
   </data>
   <data name="WebsiteUrl" xml:space="preserve">
-    <value>Website Url</value>
+    <value>Webadresse</value>
   </data>
 </root>

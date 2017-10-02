@@ -27,8 +27,10 @@ const rollupGlobals = {
   'rxjs/Subject': 'Rx',
   'rxjs/ReplaySubject': 'Rx',
   'rxjs/add/operator/map': 'Rx.Observable.prototype',
+  'rxjs/add/operator/mergeMap': 'Rx.Observable.prototype',
   'rxjs/add/operator/first': 'Rx.Observable.prototype',
-  'rxjs/add/operator/startWith': 'Rx.Observable.prototype'
+  'rxjs/add/operator/startWith': 'Rx.Observable.prototype',
+  'rxjs/add/operator/lift': 'Rx.Observable.prototype'
 };
 
 /**

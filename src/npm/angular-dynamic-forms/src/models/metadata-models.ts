@@ -1,14 +1,16 @@
 ﻿/**
  * Form metadata form information retrieved from SpaMetadataMiddleware
  */
-export class BaseMetadataModel {
+// ReSharper disable once InconsistentNaming
+export interface BaseMetadataModel {
+    
     /**
-     * Key (the name of the server side property)
+     * key (the name of json serialized property) and the AbstractControl key
      */
     key: string;
 
     /**
-     * Name (the name of json serialized property) and the AbstractControl key
+     * Name (the name of the server side property)
      */
     name: string;
 
@@ -40,7 +42,8 @@ export class BaseMetadataModel {
 /**
  * Property metadata retrieved from SpaMetadataMiddleware
  */
-export class PropertyMetadataModel extends BaseMetadataModel {
+// ReSharper disable once InconsistentNaming
+export interface PropertyMetadataModel extends BaseMetadataModel {
 
     /**
      * Place holder text
@@ -72,7 +75,8 @@ export class PropertyMetadataModel extends BaseMetadataModel {
 /**
  * Type metadata retrieved from SpaMetadataMiddleware
  */
-export class TypeMetadataModel extends BaseMetadataModel {
+// ReSharper disable once InconsistentNaming
+export interface TypeMetadataModel extends BaseMetadataModel {
     /**
      * Property collection
      */

@@ -33,17 +33,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Models\ExampleModelResources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ExampleModelResources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Models\ExampleModelResources.resx">
+    <EmbeddedResource Update="Models\ExampleModelResources.de.resx">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Models\ExampleModelResources.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ExampleModelResources.Designer.cs</LastGenOutput>
+      <LastGenOutput>ExampleModelResources.en.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

@@ -1,4 +1,6 @@
-﻿import { InjectionToken, Inject } from '@angular/core';
+﻿import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable } from 'rxjs/Observable';
+import { InjectionToken, Inject } from '@angular/core';
 
 
 // ReSharper disable once InconsistentNaming
@@ -8,6 +10,7 @@ export const SPA_METADATA_CULTURE_SERVICE = new InjectionToken<ICultureService>(
 
 export interface ICultureService {
     currentCulture: string;
+    cultureObservable: Observable<string>;
 }
 
 export class CurrentCultureService implements ICultureService {
@@ -21,10 +24,15 @@ export class CurrentCultureService implements ICultureService {
         const index = supportedCultures.findIndex(v => v === null || v === undefined || v === '');
 		if (index > 0) {
 		    throw `Parameter supportedCultures passed to CurrentCultureService constructor cannot contain empty values. Empty value found at index:${index}.`;
-		}
-	}
+        }
+        this.cultureSubject = new ReplaySubject<string>(1);
+        this.cultureObservable = this.cultureSubject.asObservable();
+	    this.currentCulture = this.getSupportedCulture();
+    }
 
+    private readonly cultureSubject: ReplaySubject<string>;
     private culture: string;
+    readonly cultureObservable: Observable<string>;
     get currentCulture(): string {
         if (this.culture) {
             return this.culture;
@@ -33,7 +41,13 @@ export class CurrentCultureService implements ICultureService {
     }
 
 	set currentCulture(val: string) {
-	    this.culture = val;
+        if (!val) {
+            val = this.getSupportedCulture();
+        }
+        if (val !== this.culture) {
+            this.culture = val;
+            this.cultureSubject.next(val);
+        }
 	}
 
 	private getSupportedCulture(): string {

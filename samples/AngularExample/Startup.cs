@@ -1,10 +1,13 @@
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AngularExample.Models;
+using Microsoft.AspNetCore.Localization;
 
 namespace AngularExample
 {
@@ -41,7 +44,20 @@ namespace AngularExample
             }
 
             app.UseStaticFiles();
-	        app.UseSpaMetadata("/metadata");
+			var supportedCultures = new List<CultureInfo>()
+			{
+				new CultureInfo("en-GB"),
+				new CultureInfo("de-DE")
+			};
+	        app.UseRequestLocalization(new RequestLocalizationOptions()
+	        {
+		        DefaultRequestCulture = new RequestCulture("en-GB"),
+				SupportedCultures = supportedCultures,
+				SupportedUICultures = supportedCultures.Select(c => c.Parent).ToList(),
+				FallBackToParentCultures = true,
+				FallBackToParentUICultures = true
+	        });
+			app.UseSpaMetadata("/metadata");
 
             app.UseMvc(routes =>
             {

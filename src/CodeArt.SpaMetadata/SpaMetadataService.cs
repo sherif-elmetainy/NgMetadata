@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace CodeArt.SpaMetadata
 {
@@ -15,8 +19,9 @@ namespace CodeArt.SpaMetadata
 	    private readonly SpaMetadataOptions _options;
 	    private readonly IMemoryCache _memoryCache;
 	    private readonly IModelMetadataProvider _modelMetadataProvider;
-	    
-	    private static readonly Dictionary<Type, string> BuiltInTypes = new Dictionary<Type, string>
+	    private readonly JsonSerializerSettings _modelSerializerSettings;
+
+		private static readonly Dictionary<Type, string> BuiltInTypes = new Dictionary<Type, string>
 	    {
 		    {typeof(string), "string"},
 		    {typeof(byte), "int"},
@@ -38,11 +43,13 @@ namespace CodeArt.SpaMetadata
 		    {typeof(bool), "boolean"}
 	    };
 
-		public SpaMetadataService(IModelMetadataProvider modelMetadataProvider,
+
+	    public SpaMetadataService(IModelMetadataProvider modelMetadataProvider,
 		    IMemoryCache memoryCache,
 		    IOptions<SpaMetadataOptions> options,
 			IEnumerable<ITypeMetadataProcessor> typeMetadataProcessors,
-			IEnumerable<IPropertyMetadataProcessor> propertyMetadataProcessors
+			IEnumerable<IPropertyMetadataProcessor> propertyMetadataProcessors,
+			IOptions<MvcJsonOptions> mvcJsonOptions
 			)
 	    {
 		    _typeMetadataProcessors = typeMetadataProcessors;
@@ -51,7 +58,8 @@ namespace CodeArt.SpaMetadata
 
 		    _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
 		    _options = options.Value ?? throw new ArgumentNullException(nameof(options));
-		}
+		    _modelSerializerSettings = _options.ModelSerializerSettings ?? mvcJsonOptions.Value.SerializerSettings;
+	    }
 
 	    private sealed class MetadataCacheKey : IEquatable<MetadataCacheKey>
 	    {
@@ -112,6 +120,7 @@ namespace CodeArt.SpaMetadata
 
 	    private async Task<ModelInformation> GetModelMetadataInformation(ModelMetadata typeMetadata)
 	    {
+		    var contract = (JsonObjectContract) _modelSerializerSettings.ContractResolver.ResolveContract(typeMetadata.ModelType);
 		    var info = new TypeModelInformation
 		    {
 			    Name = typeMetadata.PropertyName,
@@ -123,7 +132,7 @@ namespace CodeArt.SpaMetadata
 
 		    foreach (var typeMetadataProperty in typeMetadata.Properties)
 			{
-				var propertyInfo = await GetPropertyModelInformation(typeMetadataProperty);
+				var propertyInfo = await GetPropertyModelInformation(typeMetadataProperty, contract);
 				info.Properties.Add(propertyInfo);
 			}
 
@@ -141,15 +150,16 @@ namespace CodeArt.SpaMetadata
 			return info;
 	    }
 
-	    private async Task<PropertyModelInformation> GetPropertyModelInformation(ModelMetadata typeMetadataProperty)
+	    private async Task<PropertyModelInformation> GetPropertyModelInformation(ModelMetadata typeMetadataProperty, JsonObjectContract contract)
 	    {
+		    var jsonProperty = contract.Properties.Single(c => c.UnderlyingName == typeMetadataProperty.PropertyName);
 		    var propertyInfo = new PropertyModelInformation
 		    {
 			    Name = typeMetadataProperty.PropertyName,
 			    DisplayName = typeMetadataProperty.DisplayName,
 			    Description = typeMetadataProperty.Description,
 			    PlaceHolderText = typeMetadataProperty.Placeholder,
-			    Key = typeMetadataProperty.PropertyName,
+			    Key = jsonProperty.PropertyName,
 			    Order = typeMetadataProperty.Order,
 				TypeName = GetBuildInType(typeMetadataProperty.ModelType)
 		    };
