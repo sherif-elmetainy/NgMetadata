@@ -1,7 +1,7 @@
 ﻿import { AbstractControl, FormGroup } from '@angular/forms';
 import { Injector, Type } from '@angular/core';
 
-import { AbstractFormModel } from './abstract-form-model';
+import { AbstractFormModel } from './abstract-form.model';
 import { AbstractFormComponent } from '../components/abstract-form.component';
 import { FormGroupComponent } from '../components/form-group.component';
 import { TypeMetadataModel, BaseMetadataModel } from './metadata-models';

@@ -1,7 +1,7 @@
 ﻿import { Injector } from '@angular/core';
 import { ValidatorFn, AbstractControl } from '@angular/forms';
 
-import { AbstractFormModel } from './abstract-form-model';
+import { AbstractFormModel } from './abstract-form.model';
 import { PropertyMetadataModel, BaseMetadataModel } from './metadata-models';
 import { ITypeConverterService, SPA_METADATA_TYPE_CONVERTER_SERVICE} from '../services/type-converter.service';
 

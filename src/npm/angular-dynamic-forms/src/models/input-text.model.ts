@@ -1,7 +1,7 @@
 ﻿import { Injector, Type } from '@angular/core';
 import { FormControl, AbstractControl } from '@angular/forms';
 
-import { AbstractInputModel } from './abstract-input-model';
+import { AbstractInputModel } from './abstract-input.model';
 import { PropertyMetadataModel, BaseMetadataModel } from './metadata-models';
 import { FormInputTextComponent } from '../components/form-input-text.component';
 import { AbstractFormComponent } from '../components/abstract-form.component';

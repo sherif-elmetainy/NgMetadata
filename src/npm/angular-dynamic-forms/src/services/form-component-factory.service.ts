@@ -1,11 +1,11 @@
 ﻿import { Injectable, Injector } from '@angular/core';
 
 import { PropertyMetadataModel } from '../models/metadata-models';
-import { AbstractFormModel } from '../models/abstract-form-model';
-import { FormGroupModel } from '../models/form-group-model';
-import { InputTextModel } from '../models/input-text-model';
-import { NumericModel } from '../models/numeric-model';
-import { IntegerModel } from '../models/integer-model';
+import { AbstractFormModel } from '../models/abstract-form.model';
+import { FormGroupModel } from '../models/form-group.model';
+import { InputTextModel } from '../models/input-text.model';
+import { NumericModel } from '../models/numeric.model';
+import { IntegerModel } from '../models/integer.model';
 
 export type FormModelFactory = (metadata: PropertyMetadataModel, injector: Injector) => AbstractFormModel;
 export type ResolveFormModelFn = (metadata: PropertyMetadataModel) => FormModelFactory;

@@ -3,8 +3,8 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { AbstractFormComponent } from './abstract-form.component';
 import { MetadataService } from '../services/metadata.service';
-import { AbstractFormModel } from '../models/abstract-form-model';
-import { FormGroupModel } from '../models/form-group-model';
+import { AbstractFormModel } from '../models/abstract-form.model';
+import { FormGroupModel } from '../models/form-group.model';
 
 
 /**

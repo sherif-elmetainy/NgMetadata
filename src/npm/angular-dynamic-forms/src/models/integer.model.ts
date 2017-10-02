@@ -1,6 +1,6 @@
 ﻿import { Injector } from '@angular/core';
 
-import { NumericModel } from './numeric-model';
+import { NumericModel } from './numeric.model';
 import { ITypeConverterService, SPA_METADATA_TYPE_CONVERTER_SERVICE } from '../services/type-converter.service';
 import { PropertyMetadataModel } from './metadata-models';
 

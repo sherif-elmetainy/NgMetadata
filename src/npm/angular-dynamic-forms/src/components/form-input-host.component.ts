@@ -1,6 +1,6 @@
 ﻿import { Component, AfterViewInit, ViewChild, Input, ComponentFactoryResolver, ChangeDetectorRef } from '@angular/core';
 import { FormHostDirective } from '../directives/form-host.directive';
-import { AbstractFormModel } from '../models/abstract-form-model';
+import { AbstractFormModel } from '../models/abstract-form.model';
 
 /** @internal */
 @Component({

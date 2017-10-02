@@ -1,5 +1,5 @@
 ﻿import { Input } from '@angular/core';
-import { AbstractFormModel } from '../models/abstract-form-model';
+import { AbstractFormModel } from '../models/abstract-form.model';
 
 /**
  * Base class form form metadata

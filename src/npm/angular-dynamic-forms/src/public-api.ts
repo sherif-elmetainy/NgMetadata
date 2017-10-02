@@ -16,12 +16,12 @@ export { DefaultGlobalizationService, SPA_METADATA_GLOBALIZE_STATIC } from './se
 export { SPA_METADATA_CULTURE_SERVICE, SPA_METADATA_SUPPORTED_CULTURES, ICultureService } from './services/current-culture.service';
 
 export { BaseMetadataModel, TypeMetadataModel, PropertyMetadataModel } from './models/metadata-models';
-export { AbstractFormModel } from './models/abstract-form-model';
-export { AbstractInputModel } from './models/abstract-input-model';
-export { FormGroupModel } from './models/form-group-model';
-export { InputTextModel } from './models/input-text-model';
-export { NumericModel } from './models/numeric-model';
-export { IntegerModel } from './models/integer-model';
+export { AbstractFormModel } from './models/abstract-form.model';
+export { AbstractInputModel } from './models/abstract-input.model';
+export { FormGroupModel } from './models/form-group.model';
+export { InputTextModel } from './models/input-text.model';
+export { NumericModel } from './models/numeric.model';
+export { IntegerModel } from './models/integer.model';
 
 export { AngularDynamicFormsModule } from './modules/angular-dynamic-forms.module';
 export { AngularDynamicFormsServicesModule } from './modules/angular-dynamic-forms-services.module';
