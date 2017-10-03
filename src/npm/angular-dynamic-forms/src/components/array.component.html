@@ -1,0 +1,13 @@
+﻿<ul>
+    <li *ngFor="let element of arrayModel.formModels">
+        <form-input-host [model]="element"></form-input-host>
+        <button class="btn btn-default" *ngIf="!isTop(element)" (click)="top(element)">Top</button>
+        <button class="btn btn-default" *ngIf="!isTop(element)" (click)="up(element)">Up</button>
+        <button class="btn btn-default" *ngIf="!isBottom(element)" (click)="down(element)">Down</button>
+        <button class="btn btn-default" *ngIf="!isBottom(element)" (click)="bottom(element)">Bottom</button>
+        <button class="btn btn-danger" (click)="remove(element)">Remove</button>
+    </li>
+</ul>
+<div>
+    <button class="btn btn-default" (click)="add()">Add</button>
+</div>

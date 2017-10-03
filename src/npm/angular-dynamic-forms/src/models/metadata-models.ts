@@ -69,7 +69,9 @@ export interface PropertyMetadataModel extends BaseMetadataModel {
      * Type name (for simple types). When this is null
      */
     typeName: string|null;
-    type: TypeMetadataModel|null;
+    type: TypeMetadataModel | null;
+
+    elementMetadata: PropertyMetadataModel;
 }
 
 /**

@@ -163,7 +163,15 @@ namespace CodeArt.SpaMetadata
 			    Order = typeMetadataProperty.Order,
 				TypeName = GetBuildInType(typeMetadataProperty.ModelType)
 		    };
-
+		    if (typeMetadataProperty.IsCollectionType)
+		    {
+			    propertyInfo.ElementModelInformation = new PropertyModelInformation
+			    {
+				    PlaceHolderText = typeMetadataProperty.Placeholder,
+				    TypeName = GetBuildInType(typeMetadataProperty.ElementType)
+			    };
+			    propertyInfo.IsCollection = true;
+		    }
 		    if (_propertyMetadataProcessors != null)
 		    {
 			    foreach (var propertyMetadataProcessor in _propertyMetadataProcessors)

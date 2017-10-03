@@ -22,6 +22,7 @@ export { FormGroupModel } from './models/form-group.model';
 export { InputTextModel } from './models/input-text.model';
 export { NumericModel } from './models/numeric.model';
 export { IntegerModel } from './models/integer.model';
+export { ArrayModel } from './models/array.model';
 
 export { AngularDynamicFormsModule } from './modules/angular-dynamic-forms.module';
 export { AngularDynamicFormsServicesModule } from './modules/angular-dynamic-forms-services.module';

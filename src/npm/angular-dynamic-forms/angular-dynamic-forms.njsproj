@@ -33,6 +33,9 @@
     <Content Include="package.json" />
     <Content Include="playground\index.html" />
     <Content Include="playground\tsconfig.json" />
+    <Content Include="src\components\array.component.html">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\components\form-group.component.html" />
     <Content Include="src\components\form-input-host.component.html" />
     <Content Include="src\components\form-input-text.component.html" />
@@ -40,6 +43,7 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="src\components\validation-errors.component.html" />
+    <Content Include="src\models\array.model.ts" />
     <Content Include="src\package.json" />
     <Content Include="src\services\current-culture.service.ts">
       <SubType>Code</SubType>
@@ -50,6 +54,9 @@
     <Content Include="README.MD" />
     <Content Include="tslint.json" />
     <TypeScriptCompile Include="playground\index.ts" />
+    <TypeScriptCompile Include="src\components\array.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\components\form-input-host.component.ts" />
     <TypeScriptCompile Include="src\components\form-input-text.component.ts">
       <SubType>Code</SubType>
@@ -72,19 +79,19 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\index.ts" />
-    <TypeScriptCompile Include="src\models\abstract-form-model.ts">
+    <TypeScriptCompile Include="src\models\abstract-form.model.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\models\abstract-input-model.ts">
+    <TypeScriptCompile Include="src\models\abstract-input.model.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\models\form-group-model.ts">
+    <TypeScriptCompile Include="src\models\form-group.model.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\models\input-text-model.ts">
+    <TypeScriptCompile Include="src\models\input-text.model.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\models\integer-model.ts">
+    <TypeScriptCompile Include="src\models\integer.model.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\models\metadata-models.ts">
@@ -93,7 +100,7 @@
     <Compile Include="gulpfile.js">
       <SubType>Code</SubType>
     </Compile>
-    <TypeScriptCompile Include="src\models\numeric-model.ts">
+    <TypeScriptCompile Include="src\models\numeric.model.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\modules\angular-dynamic-forms-services.module.ts">

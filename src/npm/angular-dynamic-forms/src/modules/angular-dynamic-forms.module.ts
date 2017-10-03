@@ -8,11 +8,14 @@ import { FormInputHostComponent } from '../components/form-input-host.component'
 import { FormHostDirective } from '../directives/form-host.directive';
 import { FormMultilineComponent } from '../components/form-multiline.component';
 import { ValidationErrorsComponent } from '../components/validation-errors.component';
+
 import { RemoveHostTagDirective } from '../directives/remove-host-tag.directive';
 import { ChangeTagDirective } from '../directives/change-tag.directive';
+import { ArrayComponent } from '../components/array.component';
 
 @NgModule({
     declarations: [
+        ArrayComponent,
         FormGroupComponent,
         FormInputTextComponent,
         FormInputHostComponent,
@@ -23,7 +26,7 @@ import { ChangeTagDirective } from '../directives/change-tag.directive';
         ChangeTagDirective
     ],
     imports: [FormsModule, ReactiveFormsModule, CommonModule],
-    entryComponents: [FormGroupComponent, FormInputTextComponent, FormMultilineComponent],
+    entryComponents: [FormGroupComponent, FormInputTextComponent, FormMultilineComponent, ArrayComponent ],
     exports: [FormGroupComponent, ValidationErrorsComponent, RemoveHostTagDirective, ChangeTagDirective]
 })
 export class AngularDynamicFormsModule {

@@ -6,6 +6,7 @@ import { FormGroupModel } from '../models/form-group.model';
 import { InputTextModel } from '../models/input-text.model';
 import { NumericModel } from '../models/numeric.model';
 import { IntegerModel } from '../models/integer.model';
+import { ArrayModel } from '../models/array.model';
 
 export type FormModelFactory = (metadata: PropertyMetadataModel, injector: Injector) => AbstractFormModel;
 export type ResolveFormModelFn = (metadata: PropertyMetadataModel) => FormModelFactory;
@@ -53,6 +54,9 @@ export class FormComponentFactoryService {
     getFormComponentModel(property: PropertyMetadataModel): AbstractFormModel {
         if (property.type) {
             return new FormGroupModel(property.type, this.injector);
+        }
+        if (property.isCollection) {
+            return new ArrayModel(property, this.injector);
         }
 
         for (let i = this.modelResolvers.length - 1; i >= 0; i--) {

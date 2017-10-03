@@ -48,5 +48,11 @@ namespace CodeArt.SpaMetadata
 		/// </summary>
 		[JsonProperty("typeName")]
 		public string TypeName { get; set; }
-    }
+
+	    /// <summary>
+	    /// The type name of the property.
+	    /// </summary>
+	    [JsonProperty("elementMetadata")]
+	    public PropertyModelInformation ElementModelInformation { get; set; }
+	}
 }

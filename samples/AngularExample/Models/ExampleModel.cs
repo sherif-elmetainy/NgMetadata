@@ -37,5 +37,9 @@ namespace AngularExample.Models
 
 		[Range(0d, 100000d)]
 	    public double Salary { get; set; }
+
+		[MaxLength(10)]
+		[MinLength(1)]
+		public  string[] ALotOfNames { get; set; }
 	}
 }
