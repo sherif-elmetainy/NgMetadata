@@ -11,13 +11,13 @@ export class FormGroupModel extends AbstractFormModel {
     private readonly formFactoryService: FormComponentFactoryService;
     readonly properties: AbstractFormModel[];
 
-    constructor(private readonly typeMetadataModel: TypeMetadataModel, injector: Injector) {
-        super(typeMetadataModel, injector);
+    constructor(private readonly typeMetadataModel: TypeMetadataModel, injector: Injector, parent: FormGroupModel) {
+        super(typeMetadataModel, injector, parent);
         this.formFactoryService = injector.get(FormComponentFactoryService);
         this.properties = [];
 
         for (let i = 0; i < this.typeMetadataModel.properties.length; i++) {
-            this.properties.push(this.formFactoryService.getFormComponentModel(this.typeMetadataModel.properties[i]));
+            this.properties.push(this.formFactoryService.getFormComponentModel(this.typeMetadataModel.properties[i], this));
         }
     }
 

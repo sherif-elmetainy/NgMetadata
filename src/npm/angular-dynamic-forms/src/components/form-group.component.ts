@@ -28,7 +28,7 @@ export class FormGroupComponent extends AbstractFormComponent implements OnInit,
         this.metadataKeyInternal = val;
         this.metadataSubsription = this.metadataService.getMetadata(this.metadataKeyInternal).subscribe(m => {
             if (!this.model) {
-                const model = new FormGroupModel(m, this.injector);
+                const model = new FormGroupModel(m, this.injector, null);
                 this.model = model;
                 if (this.initialized) {
                     this.initGroups();

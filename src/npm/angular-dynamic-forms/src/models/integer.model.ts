@@ -3,6 +3,7 @@
 import { NumericModel } from './numeric.model';
 import { ITypeConverterService, SPA_METADATA_TYPE_CONVERTER_SERVICE } from '../services/type-converter.service';
 import { PropertyMetadataModel } from './metadata-models';
+import { FormGroupModel } from './form-group.model';
 
 class IntegerTypeConverterService implements ITypeConverterService {
 
@@ -35,8 +36,8 @@ class IntegerTypeConverterService implements ITypeConverterService {
 
 export class IntegerModel extends NumericModel {
 
-    constructor(propertyMetadata: PropertyMetadataModel, injector: Injector) {
-        super(propertyMetadata, injector);
+    constructor(propertyMetadata: PropertyMetadataModel, injector: Injector, parent: FormGroupModel) {
+        super(propertyMetadata, injector, parent);
         this.internalService = null;
     }
 

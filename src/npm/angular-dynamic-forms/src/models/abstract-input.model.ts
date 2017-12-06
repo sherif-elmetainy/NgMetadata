@@ -4,12 +4,13 @@ import { ValidatorFn, AbstractControl } from '@angular/forms';
 import { AbstractFormModel } from './abstract-form.model';
 import { PropertyMetadataModel, BaseMetadataModel } from './metadata-models';
 import { ITypeConverterService, SPA_METADATA_TYPE_CONVERTER_SERVICE} from '../services/type-converter.service';
+import { FormGroupModel } from './form-group.model';
 
 export abstract class AbstractInputModel extends AbstractFormModel {
     private typeConverterServiceInternal: ITypeConverterService | null;
 
-    protected constructor(public readonly propertyMetadata: PropertyMetadataModel, injector: Injector) {
-        super(propertyMetadata, injector);
+    protected constructor(public readonly propertyMetadata: PropertyMetadataModel, injector: Injector, parent: FormGroupModel) {
+        super(propertyMetadata, injector, parent);
         this.typeConverterServiceInternal = null;
     }
 

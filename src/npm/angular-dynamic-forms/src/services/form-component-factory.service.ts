@@ -8,7 +8,7 @@ import { NumericModel } from '../models/numeric.model';
 import { IntegerModel } from '../models/integer.model';
 import { ArrayModel } from '../models/array.model';
 
-export type FormModelFactory = (metadata: PropertyMetadataModel, injector: Injector) => AbstractFormModel;
+export type FormModelFactory = (metadata: PropertyMetadataModel, injector: Injector, parent: FormGroupModel) => AbstractFormModel;
 export type ResolveFormModelFn = (metadata: PropertyMetadataModel) => FormModelFactory;
 
 /**
@@ -25,9 +25,9 @@ export class FormComponentFactoryService {
      */
     constructor(private readonly injector: Injector) {
         this.modelResolvers = [];
-        this.registerTypeName('string', (p, i) => new InputTextModel(p, i));
-        this.registerTypeName('number',  (p, i) => new NumericModel(p, i));
-        this.registerTypeName('int', (p, i) => new IntegerModel(p, i));
+        this.registerTypeName('string', (props, inj, parent) => new InputTextModel(props, inj, parent));
+        this.registerTypeName('number', (props, inj, parent) => new NumericModel(props, inj, parent));
+        this.registerTypeName('int', (props, inj, parent) => new IntegerModel(props, inj, parent));
     }
 
     registerTypeName(typeName: string, factory: FormModelFactory): void {
@@ -51,18 +51,18 @@ export class FormComponentFactoryService {
      * Create form group metadata from metadata information retrieved from the server
      * @param typeMetadataModel
      */
-    getFormComponentModel(property: PropertyMetadataModel): AbstractFormModel {
+    getFormComponentModel(property: PropertyMetadataModel, parent: FormGroupModel): AbstractFormModel {
         if (property.type) {
-            return new FormGroupModel(property.type, this.injector);
+            return new FormGroupModel(property.type, this.injector, parent);
         }
         if (property.isCollection) {
-            return new ArrayModel(property, this.injector);
+            return new ArrayModel(property, this.injector, parent);
         }
 
         for (let i = this.modelResolvers.length - 1; i >= 0; i--) {
             const factory = this.modelResolvers[i](property);
             if (factory !== null) {
-                return factory(property, this.injector);
+                return factory(property, this.injector, parent);
             }
         }
         throw `Cannot resolve component type for property with metadata: ${JSON.stringify(property)}.`;

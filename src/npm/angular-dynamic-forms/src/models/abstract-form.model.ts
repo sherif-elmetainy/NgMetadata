@@ -2,14 +2,15 @@
 import { AbstractControl } from '@angular/forms';
 
 import { BaseMetadataModel } from '../models/metadata-models';
-import {AbstractFormComponent} from '../components/abstract-form.component';
+import { AbstractFormComponent } from '../components/abstract-form.component';
+import { FormGroupModel } from './form-group.model';
 
 
 export abstract class AbstractFormModel {
 
     private formControl: AbstractControl;
 
-    protected constructor(public readonly metadata: BaseMetadataModel, protected injector: Injector) {
+    protected constructor(public readonly metadata: BaseMetadataModel, protected injector: Injector, public readonly parent: FormGroupModel) {
         
     }
 

@@ -7,7 +7,8 @@ import { AbstractFormModel } from './abstract-form.model';
 import { FormComponentFactoryService } from '../services/form-component-factory.service';
 import { AbstractFormComponent } from '../components/abstract-form.component';
 import { BaseMetadataModel } from './metadata-models';
-import {ArrayComponent} from '../components/array.component';
+import { ArrayComponent } from '../components/array.component';
+import { FormGroupModel } from './form-group.model';
 
 
 export class ArrayModel extends AbstractInputModel {
@@ -17,8 +18,8 @@ export class ArrayModel extends AbstractInputModel {
     private elementMetadata: PropertyMetadataModel;
     readonly formModels: AbstractFormModel[];
 
-    constructor(propertyMetadata: PropertyMetadataModel, injector: Injector) {
-        super(propertyMetadata, injector);
+    constructor(propertyMetadata: PropertyMetadataModel, injector: Injector, parent: FormGroupModel) {
+        super(propertyMetadata, injector, parent);
         if (!propertyMetadata.elementMetadata) {
             throw 'elementMetadata for ArrayModel not set.';
         }
@@ -86,7 +87,7 @@ export class ArrayModel extends AbstractInputModel {
         for (let i = 0; i < newVal.length; i++) {
             let model: AbstractFormModel;
             if (this.formModels.length <= i) {
-                model = this.formFactoryService.getFormComponentModel(this.elementMetadata);
+                model = this.formFactoryService.getFormComponentModel(this.elementMetadata, this.parent);
                 this.formModels.push(model);
                 if (formArray) {
                     formArray.insert(formArray.length, model.control);
@@ -113,7 +114,7 @@ export class ArrayModel extends AbstractInputModel {
     }
 
     add():void {
-        const newModel = this.formFactoryService.getFormComponentModel(this.elementMetadata);
+        const newModel = this.formFactoryService.getFormComponentModel(this.elementMetadata, this.parent);
         (this.control as FormArray).insert(this.formModels.length, newModel.control);
         this.formModels.push(newModel);
     }

@@ -6,11 +6,12 @@ import { PropertyMetadataModel, BaseMetadataModel } from './metadata-models';
 import { FormInputTextComponent } from '../components/form-input-text.component';
 import { AbstractFormComponent } from '../components/abstract-form.component';
 import { FormMultilineComponent } from '../components/form-multiline.component';
+import { FormGroupModel } from './form-group.model';
 
 export class InputTextModel extends AbstractInputModel {
     private val: string;
-    constructor(propertyMetadata: PropertyMetadataModel, injector: Injector) {
-        super(propertyMetadata, injector);
+    constructor(propertyMetadata: PropertyMetadataModel, injector: Injector, parent: FormGroupModel) {
+        super(propertyMetadata, injector, parent);
     }
 
     get inputType(): string {
